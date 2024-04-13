@@ -1,3 +1,21 @@
+# UFF Qualidade e Teste - 2024.1, Grupo Burgão
+
+## Sobre
+Fork com intenção de desenvolver o trabalho da disciplina de Qualidade e Teste.
+
+## Anotações
+O Banco de dados padrão usado é o PostgreSQL, e recomenda-se fortemente manter o mesmo, por questão de simplicidade.
+O usuário e senha padrão são 'postgres' e '123456'. O Nome padrão do banco de dados criado é 'lanchonete'.
+Se necessário, essas dados podem ser modificados em: src/java/DAO
+/DaoUtil.java
+
+É necessário ter o JDBC para postgres e Java EE 7 e ele deve estar na subpasta lib dentro da pasta do glassfish, que por padrão é:
+C:\Users%username%\GlassFish_Server\glassfish\lib\ É só colocar o aqruivo nessa pasta e ser feliz.
+
+Para acessar a área restrita, use login: 'admin' e senha: 'admin', sem as aspas.
+
+Os dados populando o banco de dados são meramente ilustrativos, para que se posse visualizar o funcionamento do site.
+
 # APS-04-Lanchonete-Online-em-Java
 
 ## Sobre
