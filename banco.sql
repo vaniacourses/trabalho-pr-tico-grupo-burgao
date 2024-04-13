@@ -114,3 +114,70 @@ CREATE TABLE tb_tokens(
 	token       TEXT CONSTRAINT tb_tokens_token_nn NOT NULL UNIQUE,
 	CONSTRAINT pk_tb_tokens_id_token PRIMARY KEY (id_token)
 );
+
+----------------------------------------------
+
+-- Populando o banco com dados de exemplo
+
+INSERT INTO public.tb_enderecos (rua,bairro,numero,complemento,cidade,estado) VALUES
+	 ('Rua do João','São João',45,'324','Niterói','RJ');
+
+INSERT INTO public.tb_clientes (nome,sobrenome,telefone,usuario,senha,fg_ativo,id_endereco) VALUES
+    ('João','Cliente','123456789','joaocliente','202cb962ac59075b964b07152d234b70',1,1);
+
+INSERT INTO public.tb_lanches (nm_lanche,descricao,valor_venda,fg_ativo) VALUES
+    ('X-Salada','Pra fingir que é suadável',25.32,1);
+
+INSERT INTO public.tb_lanches (nm_lanche,descricao,valor_venda,fg_ativo) VALUES
+    ('X-Men','Lanche Delicioso dos X-Men, vem comer',26.32,1);
+
+INSERT INTO public.tb_lanches (nm_lanche,descricao,valor_venda,fg_ativo) VALUES
+    ('X-Tudão','Aquele X-Tudo que te dá vontade de comer 3, imagina só',30.92,1);
+
+INSERT INTO public.tb_lanches (nm_lanche,descricao,valor_venda,fg_ativo) VALUES
+    ('X-Bacon','Mais Bacon do que pão',32.32,1);
+
+INSERT INTO public.tb_funcionarios (nome,sobrenome,usuario,senha,cargo,salario,cad_por,fg_ativo) VALUES
+    ('Admin','sobrenome','admin','21232f297a57a5a743894a0e4a801fc3','Admin',5000.00,NULL,1);
+
+INSERT INTO public.tb_ingredientes (nm_ingrediente,descricao,quantidade,valor_compra,valor_venda,tipo,fg_ativo) VALUES
+    ('Pão Arabe','árabe!',50,1.50,1.70,'pao',1);
+
+INSERT INTO public.tb_ingredientes (nm_ingrediente,descricao,quantidade,valor_compra,valor_venda,tipo,fg_ativo) VALUES
+    ('Pão Francês','oui oui',50,1.50,1.70,'pao',1);
+
+INSERT INTO public.tb_ingredientes (nm_ingrediente,descricao,quantidade,valor_compra,valor_venda,tipo,fg_ativo) VALUES
+    ('Pão de Forma','Pão de Forma!',50,1.50,1.70,'pao',1);
+
+INSERT INTO public.tb_ingredientes (nm_ingrediente,descricao,quantidade,valor_compra,valor_venda,tipo,fg_ativo) VALUES
+    ('Bacon','Bacon!',50,1.50,1.70,'carne',1);
+
+INSERT INTO public.tb_ingredientes (nm_ingrediente,descricao,quantidade,valor_compra,valor_venda,tipo,fg_ativo) VALUES
+    ('Alface','Alface!',50,1.50,1.70,'vegetal',1);
+
+INSERT INTO public.tb_ingredientes (nm_ingrediente,descricao,quantidade,valor_compra,valor_venda,tipo,fg_ativo) VALUES
+    ('Tomate','Tomate!',50,1.50,1.70,'vegetal',1);
+
+INSERT INTO public.tb_ingredientes (nm_ingrediente,descricao,quantidade,valor_compra,valor_venda,tipo,fg_ativo) VALUES
+    ('Queijo Prato','Queijo!',50,1.50,1.70,'queijo',1);
+
+INSERT INTO public.tb_ingredientes (nm_ingrediente,descricao,quantidade,valor_compra,valor_venda,tipo,fg_ativo) VALUES
+    ('Mostarda','Mostarda!',50,1.50,1.70,'molho',1);
+
+INSERT INTO public.tb_ingredientes (nm_ingrediente,descricao,quantidade,valor_compra,valor_venda,tipo,fg_ativo) VALUES
+    ('Ketchup','Ketchup!',50,1.50,1.70,'molho',1);
+
+INSERT INTO public.tb_ingredientes (nm_ingrediente,descricao,quantidade,valor_compra,valor_venda,tipo,fg_ativo) VALUES
+    ('Javali','oink',50,1.50,1.70,'carne',1);
+
+INSERT INTO public.tb_ingredientes (nm_ingrediente,descricao,quantidade,valor_compra,valor_venda,tipo,fg_ativo) VALUES
+    ('Frango','Frango!',50,1.50,1.70,'carne',1);
+
+INSERT INTO public.tb_bebidas(id_bebida, nm_bebida, descricao, quantidade, valor_compra, valor_venda, tipo, fg_ativo)
+VALUES(nextval('tb_bebidas_id_bebida_seq'::regclass), 'bebida 1', 'é bom!', 5, 10, 0, 'Alcoólica', 0);
+
+INSERT INTO public.tb_bebidas(id_bebida, nm_bebida, descricao, quantidade, valor_compra, valor_venda, tipo, fg_ativo)
+VALUES(nextval('tb_bebidas_id_bebida_seq'::regclass), 'bebida 2', 'é bom!', 5, 10, 0, 'Refrigerante', 0);
+
+INSERT INTO public.tb_bebidas(id_bebida, nm_bebida, descricao, quantidade, valor_compra, valor_venda, tipo, fg_ativo)
+VALUES(nextval('tb_bebidas_id_bebida_seq'::regclass), 'bebida 3', 'é bom!', 5, 10, 0, 'Suco', 0);
