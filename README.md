@@ -9,9 +9,6 @@ O usuário e senha padrão são 'postgres' e '123456'. O Nome padrão do banco d
 Se necessário, essas dados podem ser modificados em: src/java/DAO
 /DaoUtil.java
 
-É necessário ter o JDBC para postgres e Java EE 7 e ele deve estar na subpasta lib dentro da pasta do glassfish, que por padrão é:
-C:\Users%username%\GlassFish_Server\glassfish\lib\ É só colocar o aqruivo nessa pasta e ser feliz.
-
 Para acessar a área restrita, use login: 'admin' e senha: 'admin', sem as aspas.
 
 Os dados populando o banco de dados são meramente ilustrativos, para que se posse visualizar o funcionamento do site.
