@@ -6,8 +6,6 @@
 package Helpers;
 
 import DAO.DaoToken;
-import java.util.ArrayList;
-import java.util.List;
 import javax.servlet.http.Cookie;
 
 /**
@@ -19,6 +17,9 @@ import javax.servlet.http.Cookie;
 // A dependência do DaoToken foi injetada no construtor da classe.
 // Um novo construtor padrão foi criado para que a classe pudesse ser instanciada sem a necessidade de passar o DaoToken como parâmetro.
 public class ValidadorCookie {
+
+    private static final String TOKEN = "token";
+    private static final String TOKENFUNC = "tokenFuncionario";
 
     private DaoToken tokenDAO;
 
@@ -38,7 +39,7 @@ public class ValidadorCookie {
             String name = cookies[i].getName();
             String value = cookies[i].getValue();
             
-            if(name.equals("token")){
+            if(name.equals(TOKEN)){
                 resultado = tokenDAO.validar(value);
             }
         }
@@ -54,7 +55,7 @@ public class ValidadorCookie {
             String name = cookies[i].getName();
             String value = cookies[i].getValue();
             
-            if(name.equals("tokenFuncionario")){
+            if(name.equals(TOKENFUNC)){
                 resultado = tokenDAO.validar(value);
             }
         }
@@ -69,11 +70,12 @@ public class ValidadorCookie {
             String value = cookies[i].getValue();
             
             try{
-            if(name.equals("tokenFuncionario")||name.equals("token")){
-                tokenDAO.remover(value);
-            }}catch(Exception e){
+                if(name.equals(TOKENFUNC)||name.equals(TOKEN)){
+                    tokenDAO.remover(value);
+                }
+            }catch(Exception e){
             throw new RuntimeException(e);
-        }
+            }
         }
     }
     
@@ -83,7 +85,7 @@ public class ValidadorCookie {
             String name = cookies[i].getName();
             String value = cookies[i].getValue();
             
-            if(name.equals("token")){
+            if(name.equals(TOKEN)){
                 String[] palavras;
                 palavras = value.split("-");
                 return palavras[0];
@@ -98,7 +100,7 @@ public class ValidadorCookie {
             String name = cookies[i].getName();
             String value = cookies[i].getValue();
             
-            if(name.equals("tokenFuncionario")){
+            if(name.equals(TOKENFUNC)){
                 String[] palavras;
                 palavras = value.split("-");
                 return palavras[0];
