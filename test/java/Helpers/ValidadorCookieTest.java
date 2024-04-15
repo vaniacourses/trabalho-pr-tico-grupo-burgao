@@ -93,4 +93,22 @@ class ValidadorCookieTest {
         validadorCookie.deletar(cookies);
         verify(mockDaoToken, times(1)).remover("tokenValido");
     }
+
+    @Test
+    void deletarAmbosTest() {
+        Cookie[] cookies = new Cookie[]{
+                new Cookie("token", "tokenValido"),
+                new Cookie("tokenFuncionario", "tokenValido")
+        };
+        doNothing().when(mockDaoToken).remover("tokenValido");
+        validadorCookie.deletar(cookies);
+        verify(mockDaoToken, times(2)).remover("tokenValido");
+    }
+
+    @Test
+    void deletarNadaTest() {
+        Cookie[] cookies = new Cookie[]{new Cookie("outroCookie", "valorQualquer")};
+        validadorCookie.deletar(cookies);
+        verify(mockDaoToken, times(0)).remover(anyString());
+    }
 }
