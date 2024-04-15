@@ -3,6 +3,9 @@
 ## Sobre
 Fork com intenção de desenvolver o trabalho da disciplina de Qualidade e Teste.
 
+## [Google doc da primera apresentação do trabalho](https://docs.google.com/document/d/1uJViBu2kToc7EvpflUtrozUWWtIOxvZnyZSSFiqF8gU/edit?usp=sharing)
+
+
 ## Anotações
 O Banco de dados padrão usado é o PostgreSQL, e recomenda-se fortemente manter o mesmo, por questão de simplicidade.
 O usuário e senha padrão são 'postgres' e '123456'. O Nome padrão do banco de dados criado é 'lanchonete'.
