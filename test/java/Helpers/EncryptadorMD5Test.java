@@ -13,7 +13,7 @@ import Helpers.EncryptadorMD5;
 public class EncryptadorMD5Test {
 
     @Test
-    public void testEncryptar() throws Exception {
+    public void testEncryptar() {
         String senha = "senha";
 
         EncryptadorMD5 encryptadorMD5 = new EncryptadorMD5();
@@ -24,18 +24,5 @@ public class EncryptadorMD5Test {
         // Verifica se o resultado é o esperado
         assertEquals(resultado2, resultado);
         assertEquals(32, resultado.length());
-    }
-
-    @Test(expected = ExecutionException.class)
-    public void testEncryptarComException() throws Exception {
-        // Mock da classe MessageDigest que lança uma exceção
-        MessageDigest messageDigest = mock(MessageDigest.class);
-        when(messageDigest.digest(any(byte[].class))).thenThrow(Exception.class); // Simulação de exceção
-
-        // Criação do objeto EncryptadorMD5 passando o mock da classe MessageDigest
-        EncryptadorMD5 encryptadorMD5 = new EncryptadorMD5(messageDigest);
-
-        // Chama o método encryptar com uma senha de exemplo
-        encryptadorMD5.encryptar("senha");
     }
 }

@@ -24,7 +24,7 @@ public class DaoPedidoTest {
     private DaoPedido daoPedido;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         mockConnection = mock(Connection.class);
         mockPreparedStatement = mock(PreparedStatement.class);
         mockResultSet = mock(ResultSet.class);
@@ -33,7 +33,7 @@ public class DaoPedidoTest {
     }
 
     @Test
-    public void testSalvar() throws SQLException {
+    public void testSalvar() {
         Pedido pedido = new Pedido();
         pedido.getCliente().setId_cliente(1);
         pedido.setData_pedido("2024-05-08");
@@ -52,7 +52,7 @@ public class DaoPedidoTest {
     }
 
     @Test
-    public void testVincularLanche() throws SQLException {
+    public void testVincularLanche() {
         Pedido pedido = new Pedido();
         Lanche lanche = new Lanche();
         lanche.setId_lanche(1);
@@ -69,7 +69,7 @@ public class DaoPedidoTest {
     }
 
     @Test
-    public void testVincularBebida() throws SQLException {
+    public void testVincularBebida() {
         Pedido pedido = new Pedido();
         Bebida bebida = new Bebida();
         bebida.setId_bebida(1);
@@ -86,7 +86,7 @@ public class DaoPedidoTest {
     }
 
     @Test
-    public void testPesquisaPorData() throws SQLException {
+    public void testPesquisaPorData() {
         Pedido pedido = new Pedido();
         pedido.setData_pedido("2024-05-08");
 

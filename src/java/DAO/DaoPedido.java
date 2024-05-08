@@ -39,7 +39,7 @@ public class DaoPedido {
             
             
         }catch(SQLException e){
-            throw new SQLException(e);
+            throw new RuntimeException(e);
         }
     }
     
@@ -59,7 +59,7 @@ public class DaoPedido {
             
         } catch(SQLException e){
             
-             throw new SQLException(e);
+             throw new RuntimeException(e);
         }
     }
     
@@ -79,7 +79,7 @@ public class DaoPedido {
             
         } catch(SQLException e){
             
-             throw new SQLException(e);
+             throw new RuntimeException(e);
         }
     }
         
@@ -107,7 +107,7 @@ public class DaoPedido {
             
         } catch(SQLException e){
             
-             throw new SQLException(e);
+             throw new RuntimeException(e);
         }
         
     }
