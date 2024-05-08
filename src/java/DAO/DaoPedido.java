@@ -23,6 +23,10 @@ public class DaoPedido {
     public DaoPedido() {
         this.conecta = new DaoUtil().conecta();
     }
+
+    public DaoPedido(Connection conecta) {
+        this.conecta = conecta;
+    }
     
     public void salvar(Pedido pedido){
         String sql = "INSERT INTO tb_pedidos(id_cliente, data_pedido, valor_total) "

@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import DAO.DaoPedido;
 import Model.Bebida;
 import Model.Lanche;
 import Model.Pedido;
@@ -27,8 +28,7 @@ public class DaoPedidoTest {
         mockConnection = mock(Connection.class);
         mockPreparedStatement = mock(PreparedStatement.class);
         mockResultSet = mock(ResultSet.class);
-        daoPedido = spy(new DaoPedido());
-        daoPedido.conecta = mockConnection;
+        daoPedido = new DaoPedido(mockConnection);
     }
 
     @Test
