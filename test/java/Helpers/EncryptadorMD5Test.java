@@ -1,14 +1,12 @@
 package Helpers;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.*;
+import Helpers.EncryptadorMD5;
+import org.junit.jupiter.api.Test;
 
 import java.security.MessageDigest;
-import java.util.concurrent.ExecutionException;
 
-import org.junit.Test;
-
-import Helpers.EncryptadorMD5;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 public class EncryptadorMD5Test {
 
