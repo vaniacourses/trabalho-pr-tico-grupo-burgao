@@ -38,8 +38,8 @@ public class DaoPedido {
             stmt.close();
             
             
-        }catch(Exception e){
-            throw new RuntimeException(e);
+        }catch(SQLException e){
+            throw new SQLException(e);
         }
     }
     
@@ -59,7 +59,7 @@ public class DaoPedido {
             
         } catch(SQLException e){
             
-             throw new RuntimeException(e);
+             throw new SQLException(e);
         }
     }
     
@@ -79,7 +79,7 @@ public class DaoPedido {
             
         } catch(SQLException e){
             
-             throw new RuntimeException(e);
+             throw new SQLException(e);
         }
     }
         
@@ -96,7 +96,6 @@ public class DaoPedido {
             while (rs.next()){
             
                 pedidoResultado.setId_pedido(rs.getInt("id_pedido"));
-                //pedidoResultado.setCliente(cliente);
                 pedidoResultado.setData_pedido(rs.getString("data_pedido"));
                 pedidoResultado.setValor_total(rs.getDouble("valor_total"));
                 
@@ -108,7 +107,7 @@ public class DaoPedido {
             
         } catch(SQLException e){
             
-             throw new RuntimeException(e);
+             throw new SQLException(e);
         }
         
     }
