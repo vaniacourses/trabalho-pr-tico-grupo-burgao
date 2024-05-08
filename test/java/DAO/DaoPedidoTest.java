@@ -1,6 +1,6 @@
 package DAO;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.sql.Connection;
@@ -8,10 +8,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import DAO.DaoPedido;
 import Model.Bebida;
 import Model.Lanche;
 import Model.Pedido;
@@ -23,7 +22,7 @@ public class DaoPedidoTest {
     private ResultSet mockResultSet;
     private DaoPedido daoPedido;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         mockConnection = mock(Connection.class);
         mockPreparedStatement = mock(PreparedStatement.class);
