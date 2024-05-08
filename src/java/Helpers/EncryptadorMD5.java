@@ -34,5 +34,7 @@ public class EncryptadorMD5 {
         } catch(Exception e) { 
             throw new RuntimeException(e);
         }   
-    } 
+    }
+
+    
 }
