@@ -17,22 +17,24 @@ public class EncryptadorMD5 {
     public String encryptar(String senha){
         String plaintext = senha;
         try {
-            
             MessageDigest m = MessageDigest.getInstance("MD5");
             m.reset();
             m.update(plaintext.getBytes());
             byte[] digest = m.digest();
             BigInteger bigInt = new BigInteger(1,digest);
             String hashtext = bigInt.toString(16);
+            StringBuilder bld = new StringBuilder(hashtext);
+
             // Now we need to zero pad it if you actually want the full 32 chars.
-            while(hashtext.length() < 32 ){
-              hashtext = "0"+hashtext;
+            while(bld.length() < 32 ){
+              bld.insert(0, "0");
             }
-            return hashtext;
-            
+
+            return bld.toString();
         } catch(Exception e) { 
             System.out.println(e);
-        };   
+        }
+
         return null;    
     } 
 
