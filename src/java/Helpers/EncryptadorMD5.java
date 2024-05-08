@@ -7,6 +7,7 @@ package Helpers;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;
+import java.util.concurrent.ExecutionException;
 
 /**
  *
@@ -32,12 +33,9 @@ public class EncryptadorMD5 {
 
             return bld.toString();
         } catch(Exception e) { 
-            System.out.println(e);
+            throw new ExecutionException(e);
         }
 
         return null;    
     } 
-
-
-    
 }
