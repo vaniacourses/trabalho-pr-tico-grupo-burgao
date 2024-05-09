@@ -99,3 +99,23 @@ public class DaoClienteTest {
         String senha = "senha";
         Cliente cliente = new Cliente(nomeUsuario, senha, 1);
         Mockito.when(daoCliente.conecta()).thenReturn(conexaoMock);
+        Mockito.when(daoCliente.pesquisaPorUsuario(cliente)).thenReturn(null);
+
+        boolean resultadoLogin = daoCliente.login(cliente);
+        assertFalse(resultadoLogin);
+    }
+
+    @Test
+    public void testLoginFalhaSenhaInvalida() throws SQLException {
+        String nomeUsuario = "joaosilva";
+        String senhaInvalida = "senha_invalida";
+        Cliente cliente = new Cliente(nomeUsuario, senhaInvalida, 1);
+        Mockito.when(daoCliente.conecta()).thenReturn(conexaoMock);
+        Mockito.when(daoCliente.pesquisaPorUsuario(cliente)).thenReturn(cliente);
+        Mockito.when(encryptadorMD5Mock.encryptar(senhaInvalida)).thenReturn("senhaCriptografada");
+
+        boolean resultadoLogin = daoCliente.login(cliente);
+
+        assertFalse(resultadoLogin);
+    }
+}

@@ -81,4 +81,40 @@ public class DaoFuncionarioTest {
         String senha = "123456";
         Funcionario funcionario = new Funcionario(nomeUsuario, null, nomeUsuario, senha, null, 0.0, 0, 1);
         Funcionario funcionarioResultado = new Funcionario("Fulano", "da Silva", "fulano.silva", "senhaCriptografada", "Gerente", 2500.00, 1, 1);
-        Mockito.when(daoFuncionario.conecta()).thenReturn
+        Mockito.when(daoFuncionario.conecta()).thenReturn(conexaoMock);
+        Mockito.when(daoFuncionario.pesquisaPorUsuario(funcionario)).thenReturn(funcionarioResultado);
+        Mockito.when(encryptadorMD5Mock.encryptar(funcionario.getSenha())).thenReturn("senhaCriptografada");
+
+        boolean autenticado = daoFuncionario.login(funcionario);
+
+        assertTrue(autenticado);
+    }
+
+    @Test
+    public void testLoginFalhaUsuarioInvalido() throws SQLException {
+        String nomeUsuario = "usuario_invalido";
+        String senha = "123456";
+        Funcionario funcionario = new Funcionario(nomeUsuario, null, nomeUsuario, senha, null, 0.0, 0, 1);
+        Mockito.when(daoFuncionario.conecta()).thenReturn(conexaoMock);
+        Mockito.when(daoFuncionario.pesquisaPorUsuario(funcionario)).thenReturn(null);
+
+        boolean autenticado = daoFuncionario.login(funcionario);
+
+        assertFalse(autenticado);
+    }
+
+    @Test
+    public void testLoginFalhaSenhaInvalida() throws SQLException {
+        String nomeUsuario = "fulano.silva";
+        String senha = "senha_invalida";
+        Funcionario funcionario = new Funcionario(nomeUsuario, null, nomeUsuario, senha, null, 0.0, 0, 1);
+        Funcionario funcionarioResultado = new Funcionario("Fulano", "da Silva", "fulano.silva", "senhaCriptografada", "Gerente", 2500.00, 1, 1);
+        Mockito.when(daoFuncionario.conecta()).thenReturn(conexaoMock);
+        Mockito.when(daoFuncionario.pesquisaPorUsuario(funcionario)).thenReturn(funcionarioResultado);
+        Mockito.when(encryptadorMD5Mock.encryptar(funcionario.getSenha())).thenReturn("senhaCriptografada");
+
+        boolean autenticado = daoFuncionario.login(funcionario);
+
+        assertFalse(autenticado);
+    }
+}
