@@ -23,7 +23,7 @@ public class DaoFuncionario {
     public DaoFuncionario(){
         this.conecta = new DaoUtil().conecta();
     }
-
+    
     public void salvar(Funcionario funcionario){
         String sql = "INSERT INTO tb_funcionarios(nome, sobrenome, usuario, senha, cargo, salario, cad_por, fg_ativo) "
                 + "VALUES(?,?,?,MD5(?),?,?,?,?)";
@@ -42,8 +42,8 @@ public class DaoFuncionario {
             stmt.close();
             
             
-        }catch (SQLException e) {
-            throw new SQLException("Erro ao salvar funcionário: " + e.getMessage());
+        }catch(Exception e){
+            throw new RuntimeException(e);
         }
     }
     
@@ -74,8 +74,9 @@ public class DaoFuncionario {
             return funcionarioResultado;
         
             
-        } catch (SQLException e) {
-            throw new SQLException("Erro ao pesquisar por usuário: " + e.getMessage());
+        } catch(SQLException e){
+            
+             throw new RuntimeException(e);
         }
         
     }
@@ -100,15 +101,15 @@ public class DaoFuncionario {
             
             rs.close();
             stmt.close();
-
-            if ((md5.encryptar(funcionario.getSenha()).equals(validFuncionario.getSenha())
-                    && (validFuncionario.getFg_ativo() == 1))) {
-                logger.info("Login efetuado com sucesso!");
+            
+            System.out.println(md5.encryptar(funcionario.getSenha()));
+            System.out.println(validFuncionario.getSenha());
+            
+            System.out.println((md5.encryptar(funcionario.getSenha()).equals(validFuncionario.getSenha())));
+            
+            if((md5.encryptar(funcionario.getSenha()).equals(validFuncionario.getSenha())) && (validFuncionario.getFg_ativo() == 1)){
                 return true;
-            } else {
-                logger.warning("Falha no login: Usuário ou senha inválidos.");
-                return false;
-            }
+            } else { return false; }
             
         } catch(SQLException e){
             JOptionPane.showMessageDialog(null, e);
