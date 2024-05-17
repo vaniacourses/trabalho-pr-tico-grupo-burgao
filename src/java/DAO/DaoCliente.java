@@ -14,7 +14,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
-import java.util.logging.Logger;
 /**
  *
  * @author kener_000
@@ -22,25 +21,18 @@ import java.util.logging.Logger;
 public class DaoCliente {
 
     private Connection conecta;
-
-    private static final Logger logger = Logger.getLogger(DaoCliente.class.getName());
-    public static final String COL_ID_CLIENTE = "id_cliente";
-    public static final String COL_NOME = "nome";
-    public static final String COL_SOBRENOME = "sobrenome";
-    public static final String COL_TELEFONE = "telefone";
-    public static final String COL_USUARIO = "usuario";
-    public static final String COL_SENHA = "senha";
-
+    
     public DaoCliente(){
         this.conecta = new DaoUtil().conecta();
     }
-
+    
     public void salvar(Cliente cliente){
-
+        //String sql = "INSERT INTO tb_clientes(nome, sobrenome, telefone, usuario, senha, fg_ativo, id_endereco) "
+        //        + "VALUES(?,?,?,?,?,?,?)";
         String sql = "INSERT INTO tb_clientes(nome, sobrenome, telefone, usuario, senha, fg_ativo, id_endereco) "
-                + "VALUES(?,?,?,?, MD5(?),?,?)";
-
-
+                  + "VALUES(?,?,?,?, MD5(?),?,?)";
+        
+        
         try{
             PreparedStatement stmt = conecta.prepareStatement(sql);
             stmt.setString(1, cliente.getNome());
@@ -58,145 +50,147 @@ public class DaoCliente {
             }
             stmt.execute();
             stmt.close();
-
-
-        }catch (SQLException e) {
-            throw new SQLException("Erro ao salvar cliente: " + e.getMessage());
+            
+            
+        }catch(Exception e){
+            throw new RuntimeException(e);
         }
     }
-
+    
     public List<Cliente> listarTodos(){
-        String sql = "SELECT " + COL_ID_CLIENTE + ", " + COL_NOME + ", " + COL_SOBRENOME + ", " + COL_TELEFONE +
-                ", " + COL_USUARIO + " " + "FROM tb_clientes WHERE fg_Ativo='1' ORDER BY " + COL_ID_CLIENTE;
+        String sql = "SELECT * FROM tb_clientes WHERE fg_Ativo='1' ORDER BY id_cliente";
         ResultSet rs;
-        List<Cliente> clientes = new ArrayList<>();
-
+        List<Cliente> clientes = new ArrayList<Cliente>();
+        
         try{
-
+            
             PreparedStatement stmt = conecta.prepareStatement(sql);
             rs = stmt.executeQuery();
-
+            
             while (rs.next()){
-
+            
                 Cliente cliente = new Cliente();
-                cliente.setId_cliente(rs.getInt(COL_ID_CLIENTE));
-                cliente.setNome(rs.getString(COL_NOME));
-                cliente.setSobrenome(rs.getString(COL_SOBRENOME));
-                cliente.setTelefone(rs.getString(COL_TELEFONE));
-                cliente.setUsuario(rs.getString(COL_USUARIO));
-                cliente.setSenha(rs.getString(COL_SENHA));
+                cliente.setId_cliente(rs.getInt("id_cliente"));
+                cliente.setNome(rs.getString("nome"));
+                cliente.setSobrenome(rs.getString("sobrenome"));
+                cliente.setTelefone(rs.getString("telefone"));
+                cliente.setUsuario(rs.getString("usuario"));
+                cliente.setSenha(rs.getString("senha"));
                 cliente.setFg_ativo(1);
-
+                
                 clientes.add(cliente);
             }
             rs.close();
             stmt.close();
             return clientes;
-
-
-        } catch (SQLException e) {
-            throw new SQLException("Erro ao listar clientes: " + e.getMessage());
+        
+            
+        } catch(SQLException e){
+            
+             throw new RuntimeException(e);
         }
-
+        
     }
-
+    
     public Cliente pesquisaPorUsuario(Cliente cliente){
         String sql = "SELECT * FROM tb_clientes WHERE usuario='"+cliente.getUsuario()+"'";
         ResultSet rs;
         Cliente clienteResultado = new Cliente();
-
+        
         try{
-
+            
             PreparedStatement stmt = conecta.prepareStatement(sql);
             rs = stmt.executeQuery();
-
+            
             while (rs.next()){
-
-                clienteResultado.setId_cliente(rs.getInt(COL_ID_CLIENTE));
-                clienteResultado.setNome(rs.getString(COL_NOME));
-                clienteResultado.setSobrenome(rs.getString(COL_SOBRENOME));
-                clienteResultado.setTelefone(rs.getString(COL_TELEFONE));
-                clienteResultado.setUsuario(rs.getString(COL_USUARIO));
-                clienteResultado.setSenha(rs.getString(COL_SENHA));
+            
+                clienteResultado.setId_cliente(rs.getInt("id_cliente"));
+                clienteResultado.setNome(rs.getString("nome"));
+                clienteResultado.setSobrenome(rs.getString("sobrenome"));
+                clienteResultado.setTelefone(rs.getString("telefone"));
+                clienteResultado.setUsuario(rs.getString("usuario"));
+                clienteResultado.setSenha(rs.getString("senha"));
                 clienteResultado.setFg_ativo(1);
 
             }
             rs.close();
             stmt.close();
             return clienteResultado;
-
-
-        } catch (SQLException e) {
-            throw new SQLException("Erro ao pesquisar por usuário: " + e.getMessage());
+        
+            
+        } catch(SQLException e){
+            
+             throw new RuntimeException(e);
         }
-
+        
     }
-
-    public Cliente pesquisaPorID(String clienteId){
-        String sql = "SELECT * FROM tb_clientes WHERE id_cliente='"+clienteId+"'";
+    
+    public Cliente pesquisaPorID(String ID){
+        String sql = "SELECT * FROM tb_clientes WHERE id_cliente='"+ID+"'";
         ResultSet rs;
         Cliente clienteResultado = new Cliente();
-
+        
         try{
-
+            
             PreparedStatement stmt = conecta.prepareStatement(sql);
             rs = stmt.executeQuery();
-
+            
             while (rs.next()){
-                clienteResultado.setId_cliente(rs.getInt(COL_ID_CLIENTE));
-                clienteResultado.setNome(rs.getString(COL_NOME));
-                clienteResultado.setSobrenome(rs.getString(COL_SOBRENOME));
-                clienteResultado.setTelefone(rs.getString(COL_TELEFONE));
+                clienteResultado.setId_cliente(rs.getInt("id_cliente"));
+                clienteResultado.setNome(rs.getString("nome"));
+                clienteResultado.setSobrenome(rs.getString("sobrenome"));
+                clienteResultado.setTelefone(rs.getString("telefone"));
                 clienteResultado.setFg_ativo(1);
             }
             rs.close();
             stmt.close();
             return clienteResultado;
-
-
-        } catch (SQLException e) {
-            throw new SQLException("Erro ao pesquisar por ID: " + e.getMessage());
+        
+            
+        } catch(SQLException e){
+            
+             throw new RuntimeException(e);
         }
-
+        
     }
-
+    
     public boolean login(Cliente cliente){
         String sql = "SELECT usuario, senha, fg_ativo FROM tb_clientes WHERE usuario = ?";
-
+        
         try{
             PreparedStatement stmt = conecta.prepareStatement(sql);
             stmt.setString(1, cliente.getUsuario());
-
+        
             ResultSet rs;
             rs = stmt.executeQuery();
             Cliente validCliente = new Cliente();
             EncryptadorMD5 md5 = new EncryptadorMD5();
-
-            while (rs.next()){
-                validCliente.setUsuario(rs.getString(COL_USUARIO));
-                validCliente.setSenha(rs.getString(COL_SENHA));
+            
+            while (rs.next()){    
+                validCliente.setUsuario(rs.getString("usuario"));
+                validCliente.setSenha(rs.getString("senha"));
                 validCliente.setFg_ativo(rs.getInt("fg_ativo"));
             }
-
+            
             rs.close();
             stmt.close();
-
-            if ((md5.encryptar(cliente.getSenha()).equals(validCliente.getSenha())
-                    && (validCliente.getFg_ativo() == 1))) {
-                logger.info("Login efetuado com sucesso!");
+            
+            System.out.println(md5.encryptar(cliente.getSenha()));
+            System.out.println(validCliente.getSenha());
+            
+            System.out.println((md5.encryptar(cliente.getSenha()).equals(validCliente.getSenha())));
+            
+            if((md5.encryptar(cliente.getSenha()).equals(validCliente.getSenha())) && (validCliente.getFg_ativo() == 1)){
                 return true;
-            } else {
-                logger.warning("Falha no login: Usuário ou senha inválidos.");
-                return false;
-            }
-
+            } else { return false; }
+            
         } catch(SQLException e){
             JOptionPane.showMessageDialog(null, e);
         }
-
+        
         return false;
     }
-
+    
 }
 
 
