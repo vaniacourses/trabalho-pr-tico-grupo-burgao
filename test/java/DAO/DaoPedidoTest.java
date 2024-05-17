@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import Model.Cliente;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -32,8 +33,9 @@ public class DaoPedidoTest {
     }
 
     @Test
-    public void testSalvar() {
+    public void testSalvar()throws SQLException{
         Pedido pedido = new Pedido();
+        pedido.setCliente(new Cliente());
         pedido.getCliente().setId_cliente(1);
         pedido.setData_pedido("2024-05-08");
         pedido.setValor_total(50.0);
@@ -51,7 +53,7 @@ public class DaoPedidoTest {
     }
 
     @Test
-    public void testVincularLanche() {
+    public void testVincularLanche()throws SQLException {
         Pedido pedido = new Pedido();
         Lanche lanche = new Lanche();
         lanche.setId_lanche(1);
@@ -68,7 +70,7 @@ public class DaoPedidoTest {
     }
 
     @Test
-    public void testVincularBebida() {
+    public void testVincularBebida()throws SQLException {
         Pedido pedido = new Pedido();
         Bebida bebida = new Bebida();
         bebida.setId_bebida(1);
@@ -85,7 +87,7 @@ public class DaoPedidoTest {
     }
 
     @Test
-    public void testPesquisaPorData() {
+    public void testPesquisaPorData() throws SQLException {
         Pedido pedido = new Pedido();
         pedido.setData_pedido("2024-05-08");
 
