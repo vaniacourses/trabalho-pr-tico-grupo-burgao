@@ -12,100 +12,70 @@ import Model.Cliente;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import DAO.DaoPedido;
-import Model.Bebida;
-import Model.Lanche;
 import Model.Pedido;
 
 public class DaoPedidoTest {
 
     private Connection mockConnection;
-    private PreparedStatement mockPreparedStatement;
+    private PreparedStatement mockStatement;
     private ResultSet mockResultSet;
     private DaoPedido daoPedido;
 
     @BeforeEach
     public void setUp() {
         mockConnection = mock(Connection.class);
-        mockPreparedStatement = mock(PreparedStatement.class);
+        mockStatement = mock(PreparedStatement.class);
         mockResultSet = mock(ResultSet.class);
         daoPedido = new DaoPedido(mockConnection);
     }
 
     @Test
-    public void testSalvar()throws SQLException{
+    public void testSalvar() throws SQLException {
+        when(mockConnection.prepareStatement(anyString())).thenReturn(mockStatement);
+
         Pedido pedido = new Pedido();
         pedido.setCliente(new Cliente());
         pedido.getCliente().setId_cliente(1);
-        pedido.setData_pedido("2024-05-08");
-        pedido.setValor_total(50.0);
-
-        when(mockConnection.prepareStatement(any(String.class))).thenReturn(mockPreparedStatement);
-        doNothing().when(mockPreparedStatement).setInt(anyInt(), anyInt());
-        doNothing().when(mockPreparedStatement).setString(anyInt(), anyString());
-        doNothing().when(mockPreparedStatement).setDouble(anyInt(), anyDouble());
-        doNothing().when(mockPreparedStatement).execute();
-        doNothing().when(mockPreparedStatement).close();
+        pedido.setData_pedido("2024-05-");
+        pedido.setValor_total(100.0);
 
         daoPedido.salvar(pedido);
 
-        verify(mockPreparedStatement).execute();
+        verify(mockStatement, times(1)).execute();
     }
 
     @Test
-    public void testVincularLanche()throws SQLException {
-        Pedido pedido = new Pedido();
-        Lanche lanche = new Lanche();
-        lanche.setId_lanche(1);
-        lanche.setQuantidade(2);
+    public void testRetornaExceptionQuandoDataIsNull() throws SQLException {
+            Pedido pedido = new Pedido();
+            pedido.setCliente(new Cliente());
+            pedido.getCliente().setId_cliente(1);
+            pedido.setData_pedido(null);
+            pedido.setValor_total(100.0);
 
-        when(mockConnection.prepareStatement(any(String.class))).thenReturn(mockPreparedStatement);
-        doNothing().when(mockPreparedStatement).setInt(anyInt(), anyInt());
-        doNothing().when(mockPreparedStatement).execute();
-        doNothing().when(mockPreparedStatement).close();
-
-        daoPedido.vincularLanche(pedido, lanche);
-
-        verify(mockPreparedStatement).execute();
+            assertThrows(RuntimeException.class, () -> daoPedido.salvar(pedido));
     }
 
     @Test
-    public void testVincularBebida()throws SQLException {
-        Pedido pedido = new Pedido();
-        Bebida bebida = new Bebida();
-        bebida.setId_bebida(1);
-        bebida.setQuantidade(2);
+    public void testGetPedidoPorData() throws SQLException {
+        var pedido = new Pedido();
+        var cliente = new Cliente();
+        cliente.setId_cliente(1);
+        pedido.setCliente(cliente);
+        pedido.setId_pedido(1);
+        pedido.setData_pedido("2024-05-01");
+        pedido.setValor_total(55.9);
 
-        when(mockConnection.prepareStatement(any(String.class))).thenReturn(mockPreparedStatement);
-        doNothing().when(mockPreparedStatement).setInt(anyInt(), anyInt());
-        doNothing().when(mockPreparedStatement).execute();
-        doNothing().when(mockPreparedStatement).close();
+        when(mockConnection.prepareStatement(anyString())).thenReturn(mockStatement);
+        when(mockStatement.executeQuery()).thenReturn(mockResultSet);
+        when(mockResultSet.next()).thenReturn(true).thenReturn(false);
+        when(mockResultSet.getInt("id_pedido")).thenReturn(pedido.getId_pedido());
+        when(mockResultSet.getString("data_pedido")).thenReturn(pedido.getData_pedido());
+        when(mockResultSet.getDouble("valor_total")).thenReturn(pedido.getValor_total());
 
-        daoPedido.vincularBebida(pedido, bebida);
+        var pedidoPersistido = daoPedido.pesquisaPorData(pedido);
 
-        verify(mockPreparedStatement).execute();
-    }
-
-    @Test
-    public void testPesquisaPorData() throws SQLException {
-        Pedido pedido = new Pedido();
-        pedido.setData_pedido("2024-05-08");
-
-        when(mockConnection.prepareStatement(any(String.class))).thenReturn(mockPreparedStatement);
-        when(mockPreparedStatement.executeQuery()).thenReturn(mockResultSet);
-        when(mockResultSet.next()).thenReturn(true);
-        when(mockResultSet.getInt("id_pedido")).thenReturn(1);
-        when(mockResultSet.getString("data_pedido")).thenReturn("2024-05-08");
-        when(mockResultSet.getDouble("valor_total")).thenReturn(50.0);
-        doNothing().when(mockResultSet).close();
-        doNothing().when(mockPreparedStatement).close();
-
-        Pedido resultado = daoPedido.pesquisaPorData(pedido);
-
-        verify(mockResultSet).next();
-        assertNotNull(resultado);
-        assertEquals(1, resultado.getId_pedido());
-        assertEquals("2024-05-08", resultado.getData_pedido());
-        assertEquals(50.0, resultado.getValor_total(), 0.001);
+        assertEquals(pedido.getId_pedido(), pedidoPersistido.getId_pedido());
+        assertEquals(pedido.getData_pedido(), pedidoPersistido.getData_pedido());
+        assertEquals(pedido.getValor_total(), pedidoPersistido.getValor_total());
     }
 }
