@@ -31,6 +31,11 @@
         <webroots>
           <root url="file://$MODULE_DIR$/out/artifacts/QT_2024_1_Burgao_war_exploded" relative="/" />
         </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/src/main/java" />
+          <root url="file://$MODULE_DIR$/src/main/resources" />
+          <root url="file://$MODULE_DIR$/src/java" />
+        </sourceRoots>
       </configuration>
     </facet>
     <facet type="web" name="Web2">

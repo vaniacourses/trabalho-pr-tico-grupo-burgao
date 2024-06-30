@@ -46,7 +46,7 @@ public class salvarLancheCliente extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream()));
         String json = "";
-        
+        Logger logger = Logger.getLogger(salvarLancheCliente.class.getName());
         ////////Validar Cookie
         boolean resultado = false;
         
@@ -55,7 +55,9 @@ public class salvarLancheCliente extends HttpServlet {
         ValidadorCookie validar = new ValidadorCookie();
         
         resultado = validar.validar(cookies);
-        }catch(java.lang.NullPointerException e){}
+        }catch(java.lang.NullPointerException e){
+              logger.info(e.toString());
+        }
         //////////////
         
         if ((br != null) && resultado) {
