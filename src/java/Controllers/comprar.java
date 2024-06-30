@@ -25,11 +25,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
+import javax.management.InvalidAttributeValueException;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -79,10 +82,14 @@ public class comprar extends HttpServlet {
             Cliente cliente = clienteDao.pesquisaPorID(String.valueOf(dados.getInt("id")));
             
             if (cliente != null) {
-                var pedido = registrarPedido(dados, cliente);
-                try (PrintWriter out = response.getWriter()) {
-                    out.println("Pedido realizado com sucesso!");
-                    out.println("Obrigado, " + pedido.getCliente().getNome());
+                try {
+                    var pedido = registrarPedido(dados, cliente, new DaoBebida(), new DaoLanche(), new DaoPedido());
+                    try (PrintWriter out = response.getWriter()) {
+                        out.println("Pedido realizado com sucesso!");
+                        out.println("Obrigado, " + pedido.getCliente().getNome());
+                    }
+                } catch (InvalidAttributeValueException | JSONException e) {
+                    logger.info(e.toString());
                 }
             } else {
                 try (PrintWriter out = response.getWriter()) {
@@ -137,23 +144,31 @@ public class comprar extends HttpServlet {
     }// </editor-fold>
 
 
-    public Pedido registrarPedido(JSONObject dados, Cliente cliente) {
+    public Pedido registrarPedido(JSONObject dados,
+                                  Cliente cliente,
+                                  DaoBebida bebidaDao,
+                                  DaoLanche lancheDao,
+                                  DaoPedido pedidoDao) throws InvalidAttributeValueException, JSONException {
         Double valor_total = 0.00;
 
         List<Lanche> lanches = new ArrayList<>();
         List<Bebida> bebidas = new ArrayList<>();
 
         Iterator<String> keys = dados.keys();
-        DaoLanche lancheDao = new DaoLanche();
-        DaoBebida bebidaDao = new DaoBebida();
 
         while(keys.hasNext()) {
 
             String nome = keys.next();
             if(!nome.equals("id")){
+
+                int quantidade = dados.getJSONArray(nome).getInt(2);
+
+                if (quantidade == 0) {
+                    throw new InvalidAttributeValueException("Quantidade não pode ser 0");
+                }
+
                 if(dados.getJSONArray(nome).get(1).equals("lanche")){
                     Lanche lanche = lancheDao.pesquisaPorNome(nome);
-                    int quantidade = dados.getJSONArray(nome).getInt(2);
                     lanche.setQuantidade(quantidade);
                     valor_total += lanche.getValor_venda();
                     lanches.add(lanche);
@@ -161,7 +176,6 @@ public class comprar extends HttpServlet {
 
                 if(dados.getJSONArray(nome).get(1).equals("bebida")){
                     Bebida bebida = bebidaDao.pesquisaPorNome(nome);
-                    int quantidade = dados.getJSONArray(nome).getInt(2);
                     bebida.setQuantidade(quantidade);
                     valor_total += bebida.getValor_venda();
                     bebidas.add(bebida);
@@ -169,7 +183,6 @@ public class comprar extends HttpServlet {
             }
         }
 
-        DaoPedido pedidoDao = new DaoPedido();
         Pedido pedido = new Pedido();
         pedido.setData_pedido(Instant.now().toString());
         pedido.setCliente(cliente);
@@ -178,14 +191,18 @@ public class comprar extends HttpServlet {
         pedido = pedidoDao.pesquisaPorData(pedido);
         pedido.setCliente(cliente);
 
+        vinculaBebidasELanches(lanches, bebidas, pedido, pedidoDao);
+
+        return pedido;
+    }
+
+    private void vinculaBebidasELanches(List<Lanche> lanches, List<Bebida> bebidas, Pedido pedido, DaoPedido daoPedido) {
         for(int i = 0; i<lanches.size(); i++){
-            pedidoDao.vincularLanche(pedido, lanches.get(i));
+            daoPedido.vincularLanche(pedido, lanches.get(i));
         }
 
         for(int i = 0; i<bebidas.size(); i++){
-            pedidoDao.vincularBebida(pedido, bebidas.get(i));
+            daoPedido.vincularBebida(pedido, bebidas.get(i));
         }
-
-        return pedido;
     }
 }
