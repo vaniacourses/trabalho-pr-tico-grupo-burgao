@@ -41,6 +41,7 @@ import org.json.JSONObject;
  */
 public class comprar extends HttpServlet {
 
+    private static final Logger logger = Logger.getLogger(comprar.class.getName());
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -52,8 +53,6 @@ public class comprar extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        Logger logger = Logger.getLogger(comprar.class.getName());
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream()));
@@ -116,7 +115,11 @@ public class comprar extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (Exception e) {
+            logger.info(e.toString());
+        }
     }
 
     /**
@@ -130,7 +133,11 @@ public class comprar extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (Exception e) {
+            logger.info(e.toString());
+        }
     }
 
     /**
