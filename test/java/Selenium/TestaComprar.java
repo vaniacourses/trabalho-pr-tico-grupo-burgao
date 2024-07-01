@@ -1,6 +1,5 @@
 package Selenium;
 
-import Model.Lanche;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,14 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.*;
 
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.FluentWait;
-import org.openqa.selenium.support.ui.Wait;
-import org.openqa.selenium.support.ui.WebDriverWait;
-
-import java.time.Duration;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -26,8 +17,6 @@ public class TestaComprar {
     private WebDriver driver;
 
     private By meuCarrinhoBotao = By.linkText("Meu Carrinho");
-
-
 
     @BeforeAll
     public static void configuraDriver() {
