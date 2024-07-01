@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.*;
 
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
@@ -22,7 +23,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TestaComprar {
 
-    protected WebDriver driver;
+    private WebDriver driver;
+
+    private By meuCarrinhoBotao = By.linkText("Meu Carrinho");
+
+
 
     @BeforeAll
     public static void configuraDriver() {
@@ -42,56 +47,27 @@ public class TestaComprar {
 
     @Test
     public void testComprarLanches() {
-        Wait<WebDriver> wait =
-                new FluentWait<>(driver)
-                        .withTimeout(Duration.ofSeconds(2))
-                        .pollingEvery(Duration.ofMillis(300))
-                        .ignoring(NoSuchElementException.class);
-        Alert alert;
-
-        // testando caessar cardapio
+        // testando acessar cardapio
         WebElement nextButton = driver.findElement(new By.ByTagName("button"));
         nextButton.click();
-        assertTrue(driver.getTitle().equals("Cardápio"));
+        CardapioPage cardapioPage = new CardapioPage(driver);
+        cardapioPage.acessarCarrinho();
 
         //Testando login
-        driver.findElement(By.linkText("Meu Carrinho")).click();
-        WebElement emailInput = driver.findElement(By.id("loginInput"));
-        WebElement senhaInput = driver.findElement(By.id("senhaInput"));
-        emailInput.sendKeys("thyago");
-        senhaInput.sendKeys("123456");
-        driver.findElement(By.className("buttonSubmit")).click();
-        assertTrue(driver.getTitle().equals("Carrinho"));
+        LoginPage loginPage = new LoginPage(driver);
+        assertTrue(loginPage.loginValidUser("thyago", "123456"));
+        cardapioPage.navigateToCardapio();
 
         //Testando adicionar dois lanches x-salada e x-men
-        driver.navigate().to("http://localhost:8080/QT_2024_1_Burgao_war_exploded/view/menu/menu.html");
+        assertTrue(cardapioPage.adicionaLancheAoCarrinho("X-Salada"));
+        assertTrue(cardapioPage.adicionaLancheAoCarrinho("X-Men"));
+        cardapioPage.acessarCarrinho();
 
-        Double valor_total = 0.0;
-
-        wait.until(d -> driver.findElement(By.className("divLanche")).isDisplayed());
-
-        List<WebElement> lanches = driver.findElements(By.className("divLanche"));
-
-        for (WebElement lanche : lanches) {
-            var titulo = lanche.findElement(By.className("tituloLanche")).getText();
-            if (titulo.contains("X-Salada") || titulo.contains("X-Men")) {
-                String preco = lanche.findElement(By.className("preco")).getText().split(" ")[1];
-                valor_total += Double.parseDouble(preco);
-                lanche.findElements(By.tagName("button")).get(1).click();
-                alert = wait.until(ExpectedConditions.alertIsPresent());
-                assertTrue(alert.getText().contains("Lanche salvo!"));
-                alert.accept();
-            }
-        }
-
-        assertEquals(25.32 + 26.32, valor_total);
-        driver.findElement(By.linkText("Meu Carrinho")).click();
-        wait.until(d -> driver.findElement(By.className("buttonSubmitSalvar")));
-        driver.findElement(By.className("buttonSubmitSalvar")).click();
-        driver.findElement(By.className("buttonSubmit")).click();
-        alert = wait.until(ExpectedConditions.alertIsPresent());
-        assertTrue(alert.getText().contains("Pedido realizado com sucesso!"));
-        alert.accept();
+        // Testando finalizar compra
+        MeuCarrinhoPage meuCarrinhoPage = new MeuCarrinhoPage(driver);
+        // preço do x-salada + x-men
+        Double valor_total_esperado = 25.32 + 26.32;
+        assertEquals(valor_total_esperado, meuCarrinhoPage.getValorTotal());
+        assertTrue(meuCarrinhoPage.finalizarCompra());
     }
-
 }
