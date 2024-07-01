@@ -42,7 +42,7 @@ public class ComprarTest {
         int quantidadeLanche1 = 2;
         int quantidadeBebida1 = 3;
         String jsonStr = String
-                .format("{\"lanche1\": [\"lanche1\", \"lanche\", %d], \"bebida1\": [\"bebida1\", \"bebida\", %d]}",
+                .format("{\"id\": 1,\"lanche1\": [\"lanche1\", \"lanche\", %d], \"bebida1\": [\"bebida1\", \"bebida\", %d]}",
                         quantidadeLanche1,
                         quantidadeBebida1);
         JSONObject dados = new JSONObject(jsonStr);
@@ -66,7 +66,7 @@ public class ComprarTest {
         int quantidadeLanche1 = 1;
         int quantidadeBebida1 = 1;
         String jsonStr = String
-                .format("{\"lanche1\": [\"lanche1\", \"lanche\", %d], \"bebida1\": [\"bebida1\", \"bebida\", %d]}",
+                .format("{\"id\": 1,\"lanche1\": [\"lanche1\", \"lanche\", %d], \"bebida1\": [\"bebida1\", \"bebida\", %d]}",
                         quantidadeLanche1,
                         quantidadeBebida1);
         JSONObject dados = new JSONObject(jsonStr);
@@ -90,7 +90,7 @@ public class ComprarTest {
         int quantidadeLanche1 = 0;
         int quantidadeBebida1 = 1;
         String jsonStr = String
-                .format("{\"lanche1\": [\"lanche1\", \"lanche\", %d], \"bebida1\": [\"bebida1\", \"bebida\", %d]}",
+                .format("{\"id\": 1,\"lanche1\": [\"lanche1\", \"lanche\", %d], \"bebida1\": [\"bebida1\", \"bebida\", %d]}",
                         quantidadeLanche1,
                         quantidadeBebida1);
         JSONObject dados = new JSONObject(jsonStr);
@@ -112,7 +112,7 @@ public class ComprarTest {
         int quantidadeLanche1 = 1;
         int quantidadeBebida1 = 0;
         String jsonStr = String
-                .format("{\"lanche1\": [\"lanche1\", \"lanche\", %d], \"bebida1\": [\"bebida1\", \"bebida\", %d]}",
+                .format("{\"id\": 1, \"lanche1\": [\"lanche1\", \"lanche\", %d], \"bebida1\": [\"bebida1\", \"bebida\", %d]}",
                         quantidadeLanche1,
                         quantidadeBebida1);
         JSONObject dados = new JSONObject(jsonStr);
@@ -131,7 +131,7 @@ public class ComprarTest {
 
     @Test
     void testRegistrarPedidoJsonSemQuantidade() {
-        String jsonStr = "{\"lanche1\": [\"lanche1\", \"lanche\"], \"bebida1\": [\"bebida1\", \"bebida\"]}";
+        String jsonStr = "{\"id\": 1,\"lanche1\": [\"lanche1\", \"lanche\"], \"bebida1\": [\"bebida1\", \"bebida\"]}";
         JSONObject dados = new JSONObject(jsonStr);
 
         Bebida bebida1 = getBebida1();
@@ -148,7 +148,7 @@ public class ComprarTest {
 
     @Test
     void testRegistrarPedidoJsonInvalido() {
-        String jsonStr = "{\"lanche1\": [], \"bebida1\": []}";
+        String jsonStr = "{\"id\": 1, \"lanche1\": [], \"bebida1\": []}";
         JSONObject dados = new JSONObject(jsonStr);
 
         Bebida bebida1 = getBebida1();
