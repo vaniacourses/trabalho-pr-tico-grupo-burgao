@@ -148,14 +148,36 @@ public class cadastro extends HttpServlet {
             return false;
         }
 
-        return true;
+        boolean hasUpperCase = false;
+        boolean hasNumber = false;
+
+        for (char c : senha.toCharArray()) {
+            if (Character.isUpperCase(c)) {
+                hasUpperCase = true;
+            }
+            if (Character.isDigit(c)) {
+                hasNumber = true;
+            }
+        }
+
+        return hasUpperCase && hasNumber;
     }
 
+
     public boolean verificaTelefone(String telefone){
-        if(telefone.length() < 10){
+        if(telefone.length() < 8){
             return false;
         }
 
+        char primeiroDigito = telefone.charAt(0);
+        if (primeiroDigito == '0' || primeiroDigito == '1' || 
+            primeiroDigito == '5' || primeiroDigito == '6' || 
+            primeiroDigito == '7' || primeiroDigito == '8') {
+            return false;
+        }
+
+
         return true;
     }
+
 }
