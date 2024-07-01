@@ -125,6 +125,9 @@ INSERT INTO public.tb_enderecos (rua,bairro,numero,complemento,cidade,estado) VA
 INSERT INTO public.tb_clientes (nome,sobrenome,telefone,usuario,senha,fg_ativo,id_endereco) VALUES
     ('João','Cliente','123456789','joaocliente','202cb962ac59075b964b07152d234b70',1,1);
 
+INSERT INTO public.tb_clientes (nome,sobrenome,telefone,usuario,senha,fg_ativo,id_endereco) VALUES
+    ('Thyago','Cliente','123456789','thyago','e10adc3949ba59abbe56e057f20f883e',1,1);
+
 INSERT INTO public.tb_lanches (nm_lanche,descricao,valor_venda,fg_ativo) VALUES
     ('X-Salada','Pra fingir que é suadável',25.32,1);
 

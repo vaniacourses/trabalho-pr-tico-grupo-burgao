@@ -10,6 +10,7 @@ public class MeuCarrinhoPage extends BasePage {
     private By botaoFormaDePagamento = By.className("buttonSubmitSalvar");
     private By botaoFinalizarCompra = By.className("buttonSubmit");
     private By valorTotal = By.className("valuePedidos");
+    private By botaoLogout = By.className("buttonLogout");
 
     public MeuCarrinhoPage(WebDriver driver) {
         super(driver);
@@ -28,5 +29,12 @@ public class MeuCarrinhoPage extends BasePage {
         wait.until(d -> driver.findElement(valorTotal).isDisplayed());
         String valor = driver.findElement(valorTotal).getText();
         return Double.parseDouble(valor.split(" ")[1]);
+    }
+
+    public boolean logout() {
+        wait.until(d -> driver.findElement(botaoLogout).isDisplayed());
+        driver.findElement(botaoLogout).click();
+        Alert alert = wait.until(ExpectedConditions.alertIsPresent());
+        return alert.getText().contains("Deslogado");
     }
 }
