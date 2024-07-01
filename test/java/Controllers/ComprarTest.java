@@ -12,16 +12,17 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import org.json.JSONObject;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import javax.management.InvalidAttributeValueException;
+import java.time.Instant;
 
 public class ComprarTest {
 
@@ -161,6 +162,61 @@ public class ComprarTest {
 
         assertThrows(JSONException.class,
                 () -> comprarServlet.registrarPedido(dados, cliente, daoBebida, daoLanche, daoPedido));
+    }
+
+    @Test
+    void testLanche1Quantidade5Bebida1Quantidade1() throws InvalidAttributeValueException, JSONException {
+        int quantidadeLanche1 = 5;
+        int quantidadeBebida1 = 1;
+        String jsonStr = String
+                .format("{\"id\": 1, \"lanche1\": [\"lanche1\", \"lanche\", %d], \"bebida1\": [\"bebida1\", \"bebida\", %d]}",
+                        quantidadeLanche1,
+                        quantidadeBebida1);
+        JSONObject dados = new JSONObject(jsonStr);
+
+        Bebida bebida1 = getBebida1();
+        Lanche lanche1 = getLanche1();
+
+        setLancheBebidaPedidoMocks(bebida1, lanche1);
+        Cliente cliente = new Cliente();
+        cliente.setId_cliente(1);
+        comprar comprarServlet = new comprar();
+
+
+        ArgumentCaptor<Lanche> lancheArgument = ArgumentCaptor.forClass(Lanche.class);
+        ArgumentCaptor<Bebida> bebidaArgument = ArgumentCaptor.forClass(Bebida.class);
+
+        comprarServlet.registrarPedido(dados, cliente, daoBebida, daoLanche, daoPedido);
+
+        verify(daoPedido, times(1)).vincularLanche(any(Pedido.class), lancheArgument.capture());
+        verify(daoPedido, times(1)).vincularBebida(any(Pedido.class), bebidaArgument.capture());
+        assertEquals(quantidadeLanche1, lancheArgument.getValue().getQuantidade());
+        assertEquals(quantidadeBebida1, bebidaArgument.getValue().getQuantidade());
+    }
+
+    @Test
+    void testPedidoSalvoCorretamente() throws InvalidAttributeValueException, JSONException {
+        int quantidadeLanche1 = 5;
+        int quantidadeBebida1 = 1;
+        String jsonStr = String
+                .format("{\"id\": 1, \"lanche1\": [\"lanche1\", \"lanche\", %d], \"bebida1\": [\"bebida1\", \"bebida\", %d]}",
+                        quantidadeLanche1,
+                        quantidadeBebida1);
+        JSONObject dados = new JSONObject(jsonStr);
+
+        Bebida bebida1 = getBebida1();
+        Lanche lanche1 = getLanche1();
+
+        setLancheBebidaPedidoMocks(bebida1, lanche1);
+        Cliente cliente = new Cliente();
+        cliente.setId_cliente(1);
+        comprar comprarServlet = new comprar();
+
+
+        Pedido pedido = comprarServlet.registrarPedido(dados, cliente, daoBebida, daoLanche, daoPedido);
+        assertEquals(pedido.getCliente().getId_cliente(), cliente.getId_cliente());
+        assertTrue(pedido.getData_pedido().contains(Instant.now().toString().split("T")[0]));
+        verify(daoPedido, times(1)).salvar(any(Pedido.class));
     }
 
     private void setLancheBebidaPedidoMocks(Bebida bebida1, Lanche lanche1) {

@@ -57,29 +57,29 @@ public class comprar extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream()));
         String json = "";
-        
+
         ////////Validar Cookie
         boolean resultado = false;
-        
-        try{
-        Cookie[] cookies = request.getCookies();
-        ValidadorCookie validar = new ValidadorCookie();
 
-        resultado = validar.validar(cookies);
+        try{
+            Cookie[] cookies = request.getCookies();
+            ValidadorCookie validar = new ValidadorCookie();
+
+            resultado = validar.validar(cookies);
         } catch(java.lang.NullPointerException e) {
             logger.info(e.toString());
         }
 
         if (resultado) {
             json = br.readLine();
-            byte[] bytes = json.getBytes(ISO_8859_1); 
-            String jsonStr = new String(bytes, UTF_8);            
+            byte[] bytes = json.getBytes(ISO_8859_1);
+            String jsonStr = new String(bytes, UTF_8);
             JSONObject dados = new JSONObject(jsonStr);
-            
-            DaoCliente clienteDao = new DaoCliente(); 
-            
+
+            DaoCliente clienteDao = new DaoCliente();
+
             Cliente cliente = clienteDao.pesquisaPorID(String.valueOf(dados.getInt("id")));
-            
+
             if (cliente != null) {
                 try {
                     var pedido = registrarPedido(dados, cliente, new DaoBebida(), new DaoLanche(), new DaoPedido());
@@ -150,7 +150,6 @@ public class comprar extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-
     public Pedido registrarPedido(JSONObject dados,
                                   Cliente cliente,
                                   DaoBebida bebidaDao,
@@ -177,14 +176,14 @@ public class comprar extends HttpServlet {
                 if(dados.getJSONArray(nome).get(1).equals("lanche")){
                     Lanche lanche = lancheDao.pesquisaPorNome(nome);
                     lanche.setQuantidade(quantidade);
-                    valor_total += lanche.getValor_venda();
+                    valor_total += lanche.getValor_venda() * quantidade;
                     lanches.add(lanche);
                 }
 
                 if(dados.getJSONArray(nome).get(1).equals("bebida")){
                     Bebida bebida = bebidaDao.pesquisaPorNome(nome);
                     bebida.setQuantidade(quantidade);
-                    valor_total += bebida.getValor_venda();
+                    valor_total += bebida.getValor_venda() * quantidade;
                     bebidas.add(bebida);
                 }
             }
@@ -196,7 +195,6 @@ public class comprar extends HttpServlet {
         pedido.setValor_total(valor_total);
         pedidoDao.salvar(pedido);
         pedido = pedidoDao.pesquisaPorData(pedido);
-        pedido.setCliente(cliente);
 
         vinculaBebidasELanches(lanches, bebidas, pedido, pedidoDao);
 
