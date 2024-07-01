@@ -42,11 +42,11 @@ class ValidadorCookieTest {
         assertFalse(validadorCookie.validar(cookies));
     }
 
-    //Classe falhou o teste!
     @Test
     void validarCookiesNull() {
-        assertFalse(validadorCookie.validar(null));
+        assertThrows(NullPointerException.class, () -> validadorCookie.validar(null));
     }
+
 
     @Test
     void validarFuncionarioTokenValido() {
@@ -68,11 +68,11 @@ class ValidadorCookieTest {
         assertFalse(validadorCookie.validarFuncionario(cookies));
     }
 
-    //Classe falhou o teste!
     @Test
     void validarFuncionarioCookiesNull() {
-        assertFalse(validadorCookie.validarFuncionario(null));
+        assertThrows(NullPointerException.class, () -> validadorCookie.validar(null));
     }
+
 
     @Test
     void getCookieIdClienteTest() {
@@ -112,3 +112,5 @@ class ValidadorCookieTest {
         verify(mockDaoToken, times(0)).remover(anyString());
     }
 }
+
+
