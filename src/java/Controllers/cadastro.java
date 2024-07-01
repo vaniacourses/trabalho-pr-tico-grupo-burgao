@@ -29,6 +29,16 @@ import org.json.JSONObject;
 @WebServlet(name = "cadastro", urlPatterns = {"/cadastro"})
 public class cadastro extends HttpServlet {
 
+    private DaoCliente clienteDAO;
+
+    public cadastro(){
+        clienteDAO = new DaoCliente();
+    }
+
+    public cadastro(DaoCliente clienteDAO){
+        this.clienteDAO = clienteDAO;
+    }
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -38,7 +48,7 @@ public class cadastro extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+    public void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
         //Seta o tipo de Conteudo que será recebido, nesse caso, um JSON
@@ -80,13 +90,12 @@ public class cadastro extends HttpServlet {
             //E Para finalizar, salva no Banco usando o DAO deles
             cliente.setEndereco(endereco);
             
-            DaoCliente clienteDAO = new DaoCliente();
-            clienteDAO.salvar(cliente);
-            
+            if (verificaSenha(cliente.getSenha()) && verificaTelefone(cliente.getTelefone())){
+                clienteDAO.salvar(cliente);
+            }
+
         }
-        
-        
-        
+
         try (PrintWriter out = response.getWriter()) {
             
             //Aqui é onde a Resposta é mandada para o Cliente, dando um Feedback de que tudo deu certo.
@@ -134,4 +143,19 @@ public class cadastro extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
+    public boolean verificaSenha(String senha){
+        if(senha.length() < 6){
+            return false;
+        }
+
+        return true;
+    }
+
+    public boolean verificaTelefone(String telefone){
+        if(telefone.length() < 10){
+            return false;
+        }
+
+        return true;
+    }
 }
