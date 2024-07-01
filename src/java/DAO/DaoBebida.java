@@ -25,6 +25,10 @@ public class DaoBebida {
     public DaoBebida() {
         this.conecta = new DaoUtil().conecta();
     }
+
+    public void setConecta(Connection conecta) {
+        this.conecta = conecta;
+    }
     
     public void salvar(Bebida bebida){
         String sql = "INSERT INTO tb_bebidas(nm_bebida, descricao, quantidade, valor_compra, valor_venda,"
