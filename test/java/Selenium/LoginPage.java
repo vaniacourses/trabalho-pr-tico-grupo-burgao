@@ -31,4 +31,9 @@ public class LoginPage extends BasePage {
         wait.until(d -> driver.findElement(By.className("nomeCliente")).isDisplayed());
         return driver.getTitle().equals("Carrinho");
     }
+
+    public CadastroPage navigateToCadastro() {
+        driver.findElement(By.linkText("Primera Vez aqui? Crie uma nova conta!")).click();
+        return new CadastroPage(driver);
+    }
 }
