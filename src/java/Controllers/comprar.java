@@ -41,116 +41,6 @@ import org.json.JSONObject;
  */
 public class comprar extends HttpServlet {
 
-    private static final Logger logger = Logger.getLogger(comprar.class.getName());
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream()));
-        String json = "";
-        
-        ////////Validar Cookie
-        boolean resultado = false;
-        
-        try{
-        Cookie[] cookies = request.getCookies();
-        ValidadorCookie validar = new ValidadorCookie();
-
-        resultado = validar.validar(cookies);
-        } catch(java.lang.NullPointerException e) {
-            logger.info(e.toString());
-        }
-
-        if (resultado) {
-            json = br.readLine();
-            byte[] bytes = json.getBytes(ISO_8859_1); 
-            String jsonStr = new String(bytes, UTF_8);            
-            JSONObject dados = new JSONObject(jsonStr);
-            
-            DaoCliente clienteDao = new DaoCliente(); 
-            
-            Cliente cliente = clienteDao.pesquisaPorID(String.valueOf(dados.getInt("id")));
-            
-            if (cliente != null) {
-                try {
-                    var pedido = registrarPedido(dados, cliente, new DaoBebida(), new DaoLanche(), new DaoPedido());
-                    try (PrintWriter out = response.getWriter()) {
-                        out.println("Pedido realizado com sucesso!");
-                        out.println("Obrigado, " + pedido.getCliente().getNome());
-                    }
-                } catch (InvalidAttributeValueException | JSONException e) {
-                    logger.info(e.toString());
-                }
-            } else {
-                try (PrintWriter out = response.getWriter()) {
-                    out.println("Usuário não encontrado!");
-                }
-            }
-
-        } else {
-            try (PrintWriter out = response.getWriter()) {
-                out.println("erro");
-            }
-        }
-    }
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        try {
-            processRequest(request, response);
-        } catch (Exception e) {
-            logger.info(e.toString());
-        }
-    }
-
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        try {
-            processRequest(request, response);
-        } catch (Exception e) {
-            logger.info(e.toString());
-        }
-    }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
-
     public Pedido registrarPedido(JSONObject dados,
                                   Cliente cliente,
                                   DaoBebida bebidaDao,
@@ -177,14 +67,14 @@ public class comprar extends HttpServlet {
                 if(dados.getJSONArray(nome).get(1).equals("lanche")){
                     Lanche lanche = lancheDao.pesquisaPorNome(nome);
                     lanche.setQuantidade(quantidade);
-                    valor_total += lanche.getValor_venda();
+                    valor_total += lanche.getValor_venda() * quantidade;
                     lanches.add(lanche);
                 }
 
                 if(dados.getJSONArray(nome).get(1).equals("bebida")){
                     Bebida bebida = bebidaDao.pesquisaPorNome(nome);
                     bebida.setQuantidade(quantidade);
-                    valor_total += bebida.getValor_venda();
+                    valor_total += bebida.getValor_venda() * quantidade;
                     bebidas.add(bebida);
                 }
             }
@@ -196,7 +86,6 @@ public class comprar extends HttpServlet {
         pedido.setValor_total(valor_total);
         pedidoDao.salvar(pedido);
         pedido = pedidoDao.pesquisaPorData(pedido);
-        pedido.setCliente(cliente);
 
         vinculaBebidasELanches(lanches, bebidas, pedido, pedidoDao);
 
