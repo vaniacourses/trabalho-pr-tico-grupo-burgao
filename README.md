@@ -3,7 +3,7 @@
 ## Sobre
 Fork com intenção de desenvolver o trabalho da disciplina de Qualidade e Teste.
 
-## [Google doc da primera apresentação do trabalho](https://docs.google.com/document/d/1uJViBu2kToc7EvpflUtrozUWWtIOxvZnyZSSFiqF8gU/edit?usp=sharing)
+## [Google doc da primera apresentação do trabalho](https://docs.google.com/document/d/1IahPzS3k5185UEmAP0Wm9r6GB_vKjs5Puz9AMRLXW_0/edit?usp=sharing)
 
 
 ## Anotações
