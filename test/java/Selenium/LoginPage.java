@@ -28,7 +28,7 @@ public class LoginPage extends BasePage {
         loginInput.sendKeys(userName);
         senhaInput.sendKeys(password);
         submitButton.click();
-        wait.until(d -> driver.findElement(By.className("nomeCliente")).isDisplayed());
+        wait.until(d -> d.findElement(By.className("nomeCliente")).isDisplayed());
         return driver.getTitle().equals("Carrinho");
     }
 
