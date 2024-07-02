@@ -23,6 +23,10 @@ public class CardapioPage extends BasePage {
             throw new IllegalStateException("Está não é a pagina de cardápio," +
                     "página atual é" + driver.getCurrentUrl());
         }
+        wait.until(d -> {
+            d.navigate().refresh();
+            return d.findElement(divLanche).isDisplayed();
+        });
         PageFactory.initElements(driver, this);
     }
 
@@ -35,7 +39,7 @@ public class CardapioPage extends BasePage {
     }
 
     public boolean adicionaLancheAoCarrinho(String nomeLanche) {
-        wait.until(d -> driver.findElement(divLanche).isDisplayed());
+        wait.until(d -> d.findElement(divLanche).isDisplayed());
         List<WebElement> lanches = driver.findElements(divLanche);
 
         for (WebElement lanche : lanches) {

@@ -8,8 +8,6 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
-import static java.lang.Thread.sleep;
-
 public class CadastroPage extends BasePage {
 
     @FindBy(name = "nome")
@@ -58,6 +56,10 @@ public class CadastroPage extends BasePage {
         estadoInput.sendKeys(cliente.getEndereco().getEstado());
         submitButton.click();
         Alert alert = wait.until(ExpectedConditions.alertIsPresent());
-        return alert.getText().contains("Usuário Cadastrado!");
+        if (alert.getText().contains("Usuário Cadastrado!")) {
+            alert.accept();
+            return true;
+        }
+        return false;
     }
 }

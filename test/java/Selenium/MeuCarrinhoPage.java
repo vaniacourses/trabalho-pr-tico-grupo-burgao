@@ -14,7 +14,7 @@ public class MeuCarrinhoPage extends BasePage {
 
     public MeuCarrinhoPage(WebDriver driver) {
         super(driver);
-        wait.until(d -> driver.getTitle().equals("Carrinho"));
+        wait.until(d -> d.getTitle().equals("Carrinho"));
     }
 
     public boolean finalizarCompra() {
@@ -22,19 +22,28 @@ public class MeuCarrinhoPage extends BasePage {
         driver.findElement(botaoFormaDePagamento).click();
         driver.findElement(botaoFinalizarCompra).click();
         Alert alert = wait.until(ExpectedConditions.alertIsPresent());
-        return alert.getText().contains("Pedido realizado com sucesso!");
+        if (alert.getText().contains("Pedido realizado com sucesso!")) {
+            alert.accept();
+            return true;
+        }
+        return false;
     }
 
     public Double getValorTotal() {
-        wait.until(d -> driver.findElement(valorTotal).isDisplayed());
+        wait.until(d -> d.findElement(valorTotal).isDisplayed());
         String valor = driver.findElement(valorTotal).getText();
         return Double.parseDouble(valor.split(" ")[1]);
     }
 
     public boolean logout() {
-        wait.until(d -> driver.findElement(botaoLogout).isDisplayed());
+        wait.until(d -> d.findElement(botaoLogout).isDisplayed());
         driver.findElement(botaoLogout).click();
         Alert alert = wait.until(ExpectedConditions.alertIsPresent());
-        return alert.getText().contains("Deslogado");
+        if (alert.getText().contains("Deslogado")) {
+            alert.accept();
+            return true;
+        };
+
+        return false;
     }
 }
