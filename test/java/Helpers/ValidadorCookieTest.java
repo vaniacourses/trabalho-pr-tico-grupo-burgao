@@ -111,6 +111,13 @@ class ValidadorCookieTest {
         validadorCookie.deletar(cookies);
         verify(mockDaoToken, times(0)).remover(anyString());
     }
+
+    @Test
+    void deletarComErro() {
+        Cookie[] cookies = new Cookie[]{new Cookie("token", "tokenValido")};
+        doThrow(new RuntimeException()).when(mockDaoToken).remover("tokenValido");
+        assertThrows(RuntimeException.class, () -> validadorCookie.deletar(cookies));
+    }
 }
 
 
