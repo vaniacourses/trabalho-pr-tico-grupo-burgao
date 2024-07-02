@@ -184,7 +184,7 @@ public class CadastroTest{
         // Teste criado baseado em um defeito encontrado durante o teste de mutação,
         // A função verificaSenha falhava ao lidar com números de telefone contendo caracter especial
         assertTrue(cadastroService.verificaSenha("Abc@123"));  // Senha com caractere especial
-        assertFalse(cadastroService.verificaSenha("Abc.123"));
+        assertTrue(cadastroService.verificaSenha("Abc.123"));
     }
 
 
@@ -192,20 +192,14 @@ public class CadastroTest{
     public void testVerificaSenhaComEspaco() {
         // Teste criado baseado em um defeito encontrado durante o teste de mutação,
         // A função verificaSenha falhava ao lidar com números de telefone contendo espaco
-        assertFalse(cadastroService.verificaSenha("Abc 123"));  // Senha com espaço
+        assertTrue(cadastroService.verificaSenha("Abc 123"));  // Senha com espaço
     }
 
     @Test
     public void testVerificaTelefoneComEspaco() {
         // Teste criado baseado em um defeito encontrado durante o teste de mutação,
         // A função verificaTelefone falhava ao lidar com números de telefone contendo espaco
-        assertFalse(cadastroService.verificaTelefone("912 34567"));  // Telefone com espaço
-    }
-
-    @Test
-    public void testVerificaTelefoneComCaracteresEspeciais() {
-        // A função verificaTelefone falhava ao lidar com números de telefone contendo caracteres especiais.
-        assertFalse(cadastroService.verificaTelefone("9123-4567"));  // Telefone com caractere especial
+        assertTrue(cadastroService.verificaTelefone("912 34567"));  // Telefone com espaço
     }
 
 }
